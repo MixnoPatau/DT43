@@ -1,0 +1,17 @@
+teksts1 = "Rudens lapas ir dzeltenas un oranžās. Lapas klāj zemi un padara to krāsainu."
+teksts2 = "Krāsainas rudens lapas krīt zemē. Lapas ir oranžās un dzeltenas."
+
+import string
+
+def normalize_text(teksts):
+    teksts = teksts.lower()  
+    teksts = teksts.translate(str.maketrans('', '', string.punctuation))  
+    return teksts.split() 
+vardi1 = set(normalize_text(teksts1))
+vardi2 = set(normalize_text(teksts2))
+
+sakritiba = vardi1 & vardi2
+sakritibas_procents = len(sakritiba) / len(vardi1 | vardi2) * 100
+
+print("Sakritīgie vārdi:", sakritiba)
+print(f"Sakritības līmenis: {sakritibas_procents:.2f}%")
