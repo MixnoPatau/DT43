@@ -1,0 +1,56 @@
+teksts1 = "Rudens lapas ir dzeltenas un oranžās. Lapas klāj zemi un padara to krāsainu."
+teksts2 = "Krāsainas rudens lapas krīt zemē. Lapas ir oranžās un dzeltenas."
+
+import string
+from textblob import TextBlob
+import re
+
+def normalize_text(teksts):
+    teksts = teksts.lower() 
+    teksts = teksts.translate(str.maketrans('', '', string.punctuation))  
+    return teksts.split()  
+
+vardi1 = set(normalize_text(teksts1))
+vardi2 = set(normalize_text(teksts2))
+
+sakritiba = vardi1 & vardi2
+sakritibas_procents = len(sakritiba) / len(vardi1 | vardi2) * 100
+
+print("Sakritīgie vārdi:", sakritiba)
+print(f"Sakritības līmenis: {sakritibas_procents:.2f}%")
+
+teksti = [
+    "Šis produkts ir lielisks, esmu ļoti apmierināts!",
+    "Esmu vīlies, produkts neatbilst aprakstam.",
+    "Neitrāls produkts, nekas īpašs."
+]
+
+for i, teksts in enumerate(teksti, start=1):
+    noskanojums = TextBlob(teksts).sentiment.polarity
+    if noskanojums > 0:
+        rezultats = "pozitīvs"
+    elif noskanojums < 0:
+        rezultats = "negatīvs"
+    else:
+        rezultats = "neitrāls"
+    print(f"Teikums {i}: {rezultats}")
+
+
+neapstradats_teksts = "@John: Šis ir lielisks produkts!!! Vai ne?  👏  👏  👏  http://example.com"
+
+def clean_text_alternate(teksts):
+    teksts = teksts.lower()  
+    teksts = re.sub(r"@\w+", "", teksts) 
+    teksts = re.sub(r"https?://\S+", "", teksts)  
+    teksts = re.sub(r"[\W_]+", " ", teksts) 
+    teksts = re.sub(r"\s+", " ", teksts).strip() 
+    return teksts
+
+notirits_teksts = clean_text_alternate(neapstradats_teksts)
+print("Tīrītais teksts (alternatīvs veids):", notirits_teksts)
+
+
+
+
+
+
